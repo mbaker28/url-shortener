@@ -32,7 +32,7 @@ final class UrlController extends AbstractController
 		} catch (ShortenerException $e) {
 			return $this->json([
 				'error' => $e->getMessage()
-			]);
+			], Response::HTTP_INTERNAL_SERVER_ERROR);
 		}
 
 		return $this->json([

@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"module": "ES2015",
+		"esModuleInterop": true,
+		"moduleResolution": "nodenext",
+		"target": "ES6"
+	}
+}

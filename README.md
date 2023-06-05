@@ -24,8 +24,8 @@ composer install
 npm run dev
 ```
 
-You can then run the web application using PHP's built-int server:
+You can then run the web application using docker:
 
-`php -S 0.0.0.0:8000 -t public/`
+`docker compose up -d --build`
 
-The web app is running at [http://localhost:8000](http://localhost:8000)
+The web app is running at [http://localhost](http://localhost)
