@@ -1,23 +1,28 @@
 import { Controller } from "@hotwired/stimulus";
 
-export default class extends Controller<HTMLDivElement> {
+export default class extends Controller<HTMLFormElement> {
 	static targets = ['url', 'output'];
 
 	declare urlTarget: HTMLInputElement;
 	declare outputTarget: HTMLDivElement;
 
-	async shorten(): Promise<void> {
+	async shorten(e: Event): Promise<void> {
+		e.preventDefault();
+
+		if (!this.urlTarget.value.length) {
+			return;
+		}
+
 		try {
+			const formData = new FormData(this.element);
+
 			const res = await fetch('/', {
 				method: 'POST',
 				headers: {
 					'Accept': 'application/json',
-					'Content-Type': 'application/x-www-form-urlencoded'
 				},
-				body: `url=${encodeURIComponent(this.urlTarget.value)}`
+				body: formData
 			});
-
-			console.log(res);
 
 			const result: ShortcodeResult = await res.json();
 

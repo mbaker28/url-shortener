@@ -4,15 +4,11 @@
 
 {% block content %}
 	<section class="container centered">
-		<div {{ stimulus_controller('shortener') }}>
-			<label for="url">Enter a URL:</label>
-			<input type="text" {{ stimulus_target('shortener', 'url') }} {{ stimulus_action('shortener', 'shorten', 'keydown.enter') }} id="url">
+		{{ form_start(form, { attr: stimulus_controller('shortener').toArray|merge(stimulus_action('shortener', 'shorten').toArray()) }) }}
+		{{ form_row(form.url, { attr: stimulus_target('shortener', 'url').toArray()|merge(stimulus_action('shortener', 'shorten', 'keydown.enter').toArray()) }) }}
+		{{ form_rest(form) }}
 
-			<button {{ stimulus_action('shortener', 'shorten') }}>
-				Shorten
-			</button>
-
-			<div {{ stimulus_target('shortener', 'output') }}></div>
-		</div>
+		<div {{ stimulus_target('shortener', 'output') }}></div>
+		{{ form_end(form) }}
 	</section>
 {% endblock %}

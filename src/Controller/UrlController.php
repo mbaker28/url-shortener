@@ -12,6 +12,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Url\ShortenerException;
 use App\Url\Shortener;
 use App\Entity\ShortUrl;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class UrlController extends AbstractController
 {
@@ -19,36 +21,32 @@ final class UrlController extends AbstractController
 	{
 	}
 
-	#[Route(
-		'/',
-		name: 'convert',
-		methods: ['POST'],
-		condition: "request.request.get('url') != null"
-	)]
-	public function convert(Request $request): Response
-	{
-		try {
-			$entity = $this->shortener->urlToShortCode($request->request->get('url'));
-		} catch (ShortenerException $e) {
-			return $this->json([
-				'error' => $e->getMessage()
-			], Response::HTTP_INTERNAL_SERVER_ERROR);
-		}
-
-		return $this->json([
-			'url' => $entity->getLongUrl(),
-			'shortCode' => $entity->getShortCode()
-		]);
-	}
-
-	#[Route('/', name: 'index', methods: ['GET'])]
-	public function index(EntityManagerInterface $em): Response
+	#[Route('/', name: 'index', methods: ['GET', 'POST'])]
+	public function __invoke(EntityManagerInterface $em, Request $request): Response
 	{
 		$repo = $em->getRepository(ShortUrl::class);
 
 		$urls = $repo->findAll();
 
-		return $this->render('shortener.twig', ['urls' => $urls]);
+		$form = $this->createFormBuilder()
+			->add('url', TextType::class, ['label' => 'Enter a URL:'])
+			->add('submit', SubmitType::class, ['label' => 'Shorten'])
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$data = $form->getData();
+
+			$entity = $this->shortener->urlToShortCode($data['url']);
+
+			return $this->json([
+				'url' => $entity->getLongUrl(),
+				'shortCode' => $entity->getShortCode()
+			]);
+		}
+
+		return $this->render('shortener.twig', ['urls' => $urls, 'form' => $form]);
 	}
 
 	#[Route('/{shortCode}', methods: ['GET'])]
