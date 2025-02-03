@@ -23,7 +23,7 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: mysql://root:password@db:3306/url_shortener?serverVersion=8&charset=utf8mb4
+      DATABASE_URL: mysql://root:password@db:3306/url_shortener?serverVersion=mariadb-10.11.3&charset=utf8mb4
     working_dir: /var/www/html
     command: php-fpm
     volumes:
