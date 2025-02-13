@@ -1,0 +1,11 @@
+**/Dockerfile
+**/*.log
+**/*.php~
+**/*.cache
+**/.dockerignore
+**/.git/
+**/.gitattributes
+**/.gitignore
+.github/
+docs/
+vendor/
