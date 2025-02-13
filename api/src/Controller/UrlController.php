@@ -20,20 +20,24 @@ final class UrlController extends AbstractController
 	{
 	}
 
-	#[Route('/short-code', methods: ['POST'])]
-	public function createShortCode(EntityManagerInterface $em, Request $request): JsonResponse
+	#[Route('/api', methods: ['GET'])]
+	public function __invoke(): Response
 	{
-		$repo = $em->getRepository(ShortUrl::class);
+		return new Response('Hello world!');
+	}
 
+	#[Route('/api/short-code', methods: ['POST'])]
+	public function createShortCode(Request $request): JsonResponse
+	{
 		$entity = $this->shortener->urlToShortCode($request->request->getString('url'));
 
 		return $this->json([
 			'url' => $entity->getLongUrl(),
 			'shortCode' => $entity->getShortCode()
-		]);
+		], 200, ['Content-Type' => 'application/json']);
 	}
 
-	#[Route('/{shortCode}', methods: ['GET'])]
+	#[Route('/api/{shortCode}', methods: ['GET'])]
 	public function redirectToLongUrl(string $shortCode): Response
 	{
 		try {

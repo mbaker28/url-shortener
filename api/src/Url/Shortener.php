@@ -36,7 +36,7 @@ final class Shortener
 		}
 
 		if ($this->validateUrlFormat($url) === false) {
-			throw new ShortenerException('Url does not have a valid format.');
+			throw new ShortenerException('URL does not have a valid format.');
 		}
 
 		if (self::CHECK_URL_EXISTS) {
@@ -111,7 +111,7 @@ final class Shortener
 	public function shortCodeToUrl(string $code, bool $increment = true): ShortUrl
 	{
 		if (empty($code)) {
-			throw new ShortenerException('NO short code was specified.');
+			throw new ShortenerException('No short code was specified.');
 		}
 
 		if (false === $this->validateShortCode($code)) {
