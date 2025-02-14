@@ -21,7 +21,8 @@ services:
     environment:
       DATABASE_URL: mysql://root:password@db:3306/url_shortener?serverVersion=mariadb-10.11.3&charset=utf8mb4
     working_dir: /var/www/html
-    command: php -S 0.0.0.0:9000 -t public/
+    command: >
+      bash -c "composer update && php -S 0.0.0.0:9000 -t public"
     ports:
       - 9000:9000
     volumes:
@@ -46,7 +47,6 @@ services:
       context: ./web
     volumes:
       - ./web:/srv/app
-      - /srv/app/node_modules
     ports:
       - 3000:3000
     restart: unless-stopped
