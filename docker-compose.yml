@@ -28,7 +28,6 @@ services:
       - ./api:/var/www/html
     networks:
       - app-network
-  
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
