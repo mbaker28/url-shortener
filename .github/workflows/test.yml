@@ -23,7 +23,7 @@ jobs:
           coverage: "none"
           php_version: "${{ matrix.php }}"
           extensions: zlib, mbstring
-          tools: flex, phpunit
+          tools: flex
       
       - name: Configure environment
         run: |
@@ -35,10 +35,10 @@ jobs:
       - name: Install dependencies
         run: |
           cd ./api
-          composer install
+          composer install -q --optimize-autoloader
 
       - name: Run PHPUnit
         run: |
           cd ./api
-          phpunit
+          php bin/phpunit
         
