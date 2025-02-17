@@ -32,12 +32,13 @@ jobs:
           
           (php --ri relay 2>&1 > /dev/null) || sudo rm -f /etc/php/*/cli/conf.d/20-relay.ini
 
-          cd ./api
-
       - name: Install dependencies
         run: |
+          cd ./api
           composer install
 
       - name: Run PHPUnit
-        run: phpunit
+        run: |
+          cd ./api
+          phpunit
         
