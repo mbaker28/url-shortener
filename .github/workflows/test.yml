@@ -21,7 +21,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           coverage: "none"
-          php_version: "${{ matrix.php }}"
+          php-version: "${{ matrix.php }}"
           extensions: zlib, mbstring
           tools: flex
       
