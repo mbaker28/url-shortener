@@ -3,67 +3,29 @@ services:
     image: mariadb:latest
     volumes:
       - db_data:/var/lib/mysql
-    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: url_shortener
       MYSQL_USER: user
       MYSQL_PASSWORD: password
+    ports:
+      - 3306:3306
     networks:
       - app-network
-  
-  php:
-    build:
-      context: .
+  web:
+    image: shinsenter/symfony:latest
     restart: always
-    container_name: app
+    container_name: web
     tty: true
     env_file:
       - .env
-    environment:
-      DATABASE_URL: mysql://root:password@db:3306/url_shortener?serverVersion=mariadb-10.11.3&charset=utf8mb4
-    working_dir: /var/www/html
-    command: php-fpm
-    volumes:
-      - ./:/var/www/html
-    depends_on:
-      - nginx
-    ports:
-      - 9000:9000
-    networks:
-      - app-network
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    ports:
-      - 9090:80
-    environment:
-      MYSQL_USERNAME: user
-      MYSQL_ROOT_PASSWORD: password
-      PMA_HOST: db
-    depends_on:
-      - db
-    networks:
-      - app-network
-
-  node:
-    image: node:19.7.0-alpine
-    container_name: node
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
-
-  #Webserver
-  nginx:
-    image: nginx:alpine
-    container_name: webserver
-    restart: always
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./:/var/www/html
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - 80:80
+      - 443:443
+      - 443:443/udp
     networks:
       - app-network
 
