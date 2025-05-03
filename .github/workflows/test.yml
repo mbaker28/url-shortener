@@ -1,0 +1,41 @@
+name: Unit Test
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: zlib, mbstring
+          coverage: none
+          tools: flex
+
+      - name: Configure environment
+        run: |
+          git config --global user.email ""
+          git config --global user.name "Symfony"
+
+          (php --ri relay 2>&1 > /dev/null) || sudo rm -f /etc/php/*/cli/conf.d/20-relay.ini
+
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-progress --no-suggest --no-interaction --optimize-autoloader
+
+      - name: Run PHPUnit
+        run: |
+          php bin/phpunit

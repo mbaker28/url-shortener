@@ -23,18 +23,14 @@ class ShortUrl
     private ?int $hits = null;
 
     #[ORM\Column]
-    private ?\DateTime $created = null;
+    private ?\DateTimeImmutable $created = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $updated = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(string $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getLongUrl(): ?string
@@ -73,15 +69,39 @@ class ShortUrl
         return $this;
     }
 
-    public function getCreated(): ?\DateTime
+    public function getCreated(): ?\DateTimeImmutable
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created): static
+    public function setCreated(\DateTimeImmutable $created): static
     {
         $this->created = $created;
 
         return $this;
+    }
+
+    public function getUpdated(): ?\DateTime
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(?\DateTime $updated): static
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedOnPrePersist(): static
+    {
+        return $this->setCreated(new \DateTimeImmutable());
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedOnPreUpdate(): static
+    {
+        return $this->setUpdated(new \DateTime());
     }
 }
