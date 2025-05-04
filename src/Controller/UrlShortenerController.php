@@ -29,12 +29,16 @@ final class UrlShortenerController extends AbstractController
     #[Route('/url-shortener/create', name: 'url_shortener_create', methods: ['POST'])]
     public function createShortUrl(Request $request): JsonResponse
     {
-        $entity = $this->shortener->urlToShortUrl($request->request->getString('url'));
+        try {
+            $entity = $this->shortener->urlToShortUrl($request->request->getString('url'));
+        } catch (ShortenerException $e) {
+            return $this->json($e->getMessage(), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+        }
 
         return $this->json([
             'url' => $entity->getLongUrl(),
             'shortCode' => $entity->getShortCode(),
-        ], 200, ['Content-Type' => 'application/json']);
+        ], Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
     #[Route('/{shortCode}', methods: ['GET'])]

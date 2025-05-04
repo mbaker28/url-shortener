@@ -6,6 +6,7 @@ use App\Repository\ShortUrlRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ShortUrlRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class ShortUrl
 {
     #[ORM\Id]
@@ -19,7 +20,7 @@ class ShortUrl
     #[ORM\Column(length: 7)]
     private ?string $shortCode = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $hits = null;
 
     #[ORM\Column]

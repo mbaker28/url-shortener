@@ -34,10 +34,15 @@ final class ShortenerService
 		}
 
 		if (self::CHECK_URL_EXISTS && !$this->verifyUrlExists($url)) {
-			throw new ShortenerException('Url does not appear to exist.');
+			throw new ShortenerException('URL does not appear to exist.');
 		}
 
-		$entity = $this->urlExistsInDb($url);
+		try {
+			$entity = $this->urlExistsInDb($url);
+		} catch (\Throwable $e) {
+			throw $e;
+		}
+
 		if (!$entity instanceof ShortUrl) {
 			$entity = $this->createShortUrl($url);
 		}
@@ -74,8 +79,12 @@ final class ShortenerService
 		$entity->setShortCode($shortCode)
 			->setLongUrl($url);
 
-		$this->em->persist($entity);
-		$this->em->flush($entity);
+		try {
+			$this->em->persist($entity);
+			$this->em->flush($entity);
+		} catch (\Throwable $e) {
+			throw new ShortenerException('Unable to create short URL.');
+		}
 
 		return $entity;
 	}
@@ -109,7 +118,7 @@ final class ShortenerService
 			throw new ShortenerException('Short code does not have a valid format.');
 		}
 
-		$entity = $this->repo->findOneBy(['short_code' => $code]);
+		$entity = $this->repo->findOneBy(['shortCode' => $code]);
 
 		if (!$entity instanceof ShortUrl) {
 			throw new ShortenerException('Short code does not appear to exist.');

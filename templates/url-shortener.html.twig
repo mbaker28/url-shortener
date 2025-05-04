@@ -2,10 +2,6 @@
 
 {% block title %}URL Shortener{% endblock %}
 
-{% block stylesheets %}
-    {{ encore_entry_link_tags('app') }}
-{% endblock %}
-
-{% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
+{% block content %}
+    <section {{ react_component('UrlShortener') }} class="container centered"></section>
 {% endblock %}
