@@ -81,7 +81,7 @@ final class ShortenerServiceTest extends TestCase
 
 		$this->repo->expects($this->once())
 			->method('findOneBy')
-			->with($this->equalTo(['short_code' => $code]))
+			->with($this->equalTo(['shortCode' => $code]))
 			->willReturn($entity);
 
 		$res = $this->shortener->shortCodeToUrl($code, false);
