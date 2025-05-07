@@ -34,28 +34,30 @@ export default function UrlShortener() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-5">
-                <label
-                    htmlFor="url"
-                    className="mb-3 block font-medium"
-                >
-                    Enter a URL:
-                </label>
-                <input
-                    type="text"
-                    placeholder="https://example.com"
-                    required
-                    className="w-full rounded-md border border-gray-300 bg-white py-3 px-6 font-medium text-gray-700 outline-none focus:border-purple-500 focus:shadow-md"
-                    {...register('url', { required: true })}
-                />
-            </div>
-            <div className="mb-5">
-                <button className={`${isPending ? 'loading' : ''} button hover:bg-purple-800 rounded-md bg-purple-500 py-3 px-8 font-semibold text-white outline-none`} disabled={isPending}>
-                    <span>Shorten</span>
-                </button>
-            </div>
-            <div dangerouslySetInnerHTML={{ __html: status }}></div>
-        </form>
+        <div className="box-shadow bg-white dark:bg-zinc-700 p-6 flex-1">
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="mb-5">
+                    <label
+                        htmlFor="url"
+                        className="mb-3 block font-medium"
+                    >
+                        Enter a URL:
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="https://example.com"
+                        required
+                        className="w-full rounded-md border border-gray-300 bg-white py-3 px-6 font-medium text-gray-700 outline-none focus:border-purple-500 focus:shadow-md"
+                        {...register('url', { required: true })}
+                    />
+                </div>
+                <div className="mb-5">
+                    <button className={`${isPending ? 'loading' : ''} button hover:bg-purple-800 rounded-md bg-purple-500 py-3 px-8 font-semibold text-white outline-none`} disabled={isPending}>
+                        <span>Shorten</span>
+                    </button>
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: status }}></div>
+            </form>
+        </div>
     );
 }
