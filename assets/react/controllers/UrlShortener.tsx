@@ -34,7 +34,7 @@ export default function UrlShortener() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="mb-12 w-full">
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-5">
                 <label
                     htmlFor="url"
