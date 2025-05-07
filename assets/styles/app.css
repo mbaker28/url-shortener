@@ -37,13 +37,11 @@
     font-size: 1.8em;
     font-weight: 400;
     line-height: 1.8em;
-  }
-
-  @media only screen and (max-width: 768px) {
-      body {
+      
+    @media only screen and (max-width: 768px) {
         font-size: 1.6em;
         line-height: 1.6em;
-      }
+    }
   }
   
   a {
