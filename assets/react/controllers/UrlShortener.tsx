@@ -52,7 +52,7 @@ export default function UrlShortener() {
                     />
                 </div>
                 <div className="mb-5">
-                    <button className={`${isPending ? 'loading' : ''} button hover:bg-purple-800 rounded-md bg-purple-500 py-3 px-8 font-semibold text-white outline-none`} disabled={isPending}>
+                    <button className={`${isPending ? 'loading' : ''} button hover:bg-purple-800 rounded-md bg-purple-500 py-3 px-8 font-semibold text-white outline-none cursor-pointer`} disabled={isPending}>
                         <span>Shorten</span>
                     </button>
                 </div>
