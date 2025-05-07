@@ -1,5 +1,5 @@
 ## URL Shortener
 
-A simple URL shortener app written in (https://symfony.com)[Symfony] and (https://react.dev)[React].
+A simple URL shortener app written in [Symfony](https://symfony.com) and [React](https://react.dev).
 
-(https://shortener.mattkbaker.com)[Click here] to demo the app.
+[Click here](https://shortener.mattkbaker.com) to demo the app.
