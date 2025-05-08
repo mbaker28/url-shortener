@@ -32,7 +32,7 @@ final class UrlShortenerController extends AbstractController
         try {
             $entity = $this->shortener->urlToShortUrl($request->request->getString('url'));
         } catch (ShortenerException $e) {
-            return $this->json($e->getMessage(), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR, ['Content-Type' => 'application/json']);
         }
 
         return $this->json([
