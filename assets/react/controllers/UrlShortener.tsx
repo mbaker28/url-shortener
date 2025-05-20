@@ -23,6 +23,12 @@ export default function UrlShortener() {
                 body: formData
             });
 
+            if (res.status !== 200) {
+                const json: { error: string } = await res.json();
+                setStatus(json.error);
+                return;
+            }
+
             const json: { url: string, shortCode: string } = await res.json();
             setStatus(`Shortened URL: <a href="//${window.location.host}/${json.shortCode}" target="_blank">${window.location.host}/${json.shortCode}</a>`);
         } catch (e) {
