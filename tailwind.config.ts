@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss';
 export default {
     content: [
         "./assets/**/*.{js,ts,jsx,tsx,mdx}",
+        "./templates/**/*.twig"
     ],
     theme: {
         extend: {
