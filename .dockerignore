@@ -1,0 +1,17 @@
+**/*.log
+**/*.php~
+**/*.cache
+**/._*
+**/.DS_Store
+.git/
+.github/
+.phpunit.cache/
+config/reference.php
+docker-compose.yml
+compose*.yaml
+Dockerfile
+public/assets/
+public/bundles/
+tests/
+var/
+vendor/
