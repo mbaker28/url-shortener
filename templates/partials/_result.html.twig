@@ -1,0 +1,11 @@
+<turbo-frame id="shortener-result">
+    <div class="result" role="status" aria-live="polite">
+        {% if error|default(null)%}
+            {{ error }}
+        {% elseif shortCode|default(null) %}
+            {% set shortUrl = url('short_url_redirect', { shortCode: shortCode }) %}
+            Shortened URL:
+            <a href="{{ shortUrl }}" target="_blank" rel="noopener noreferrer">{{ shortUrl }}</a>
+        {% endif %}
+    </div>
+</turbo-frame>

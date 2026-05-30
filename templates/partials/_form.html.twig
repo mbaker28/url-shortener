@@ -1,0 +1,27 @@
+<div class="url-shortener">
+    <form
+        action="{{ path('url_shortener_create') }}"
+        method="post"
+        data-turbo-frame="shortener-result"
+        data-action="turbo:submit-start->url-shortener#submit turbo:submit-end->url-shortener#finish"
+    >
+        <div class="form-row">
+            <label for="url" class="label">Enter a URL:</label>
+            <input
+                id="url"
+                name="url"
+                type="url"
+                placeholder="https://example.com"
+                required
+                class="input"
+                value="{{ url|default('') }}"
+            >
+        </div>
+        <div class="form-actions">
+            <button class="button" type="submit" data-url-shortener-target="submit">
+                <span>Shorten</span>
+            </button>
+        </div>
+        {% include 'partials/_result.html.twig' %}
+    </form>
+</div>

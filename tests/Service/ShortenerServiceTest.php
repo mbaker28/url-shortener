@@ -14,40 +14,37 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class ShortenerServiceTest extends TestCase
 {
-	private ShortenerService $shortener;
-	private ShortUrlRepository $repo;
-	private EntityManagerInterface $em;
-	private HttpClientInterface $client;
-
 	private string $longUrl = 'https://xyz.com';
 
-	public function setUp(): void
+	private function createShortener(ShortUrlRepository $repo, ?EntityManagerInterface $em = null): ShortenerService
 	{
-		parent::setUp();
-		$this->repo = $this->createMock(ShortUrlRepository::class);
-		$this->em = $this->createMock(EntityManagerInterface::class);
-		$this->client = $this->createMock(HttpClientInterface::class);
+		$em ??= $this->createMock(EntityManagerInterface::class);
+		$client = $this->createStub(HttpClientInterface::class);
 
-		$this->em->expects($this->once())
+		$em->expects($this->once())
 			->method('getRepository')
 			->with(ShortUrl::class)
-			->willReturn($this->repo);
+			->willReturn($repo);
 
-		$this->shortener = new ShortenerService($this->em, $this->client);
+		return new ShortenerService($em, $client);
 	}
 
 	public function testUrlToShortUrl(): void
 	{
-		$this->repo->expects($this->once())
+		$repo = $this->createMock(ShortUrlRepository::class);
+		$em = $this->createMock(EntityManagerInterface::class);
+		$shortener = $this->createShortener($repo, $em);
+
+		$repo->expects($this->once())
 			->method('findOneBy')
 			->willReturn(null);
 
-		$this->em->expects($this->once())
+		$em->expects($this->once())
 			->method('persist');
 
-		$this->em->expects($this->once())->method('flush');
+		$em->expects($this->once())->method('flush');
 
-		$entity = $this->shortener->urlToShortUrl($this->longUrl);
+		$entity = $shortener->urlToShortUrl($this->longUrl);
 
 		$this->assertEquals($this->longUrl, $entity->getLongUrl());
 	}
@@ -57,7 +54,9 @@ final class ShortenerServiceTest extends TestCase
 		$this->expectException(ShortenerException::class);
 		$this->expectExceptionMessage('No URL was specified.');
 
-		$this->shortener->urlToShortUrl('');
+		$shortener = $this->createShortener($this->createStub(ShortUrlRepository::class));
+
+		$shortener->urlToShortUrl('');
 	}
 
 	public function testUrlToShortUrlShouldThrowExceptionOnInvalidUrlFormat(): void
@@ -65,26 +64,29 @@ final class ShortenerServiceTest extends TestCase
 		$this->expectException(ShortenerException::class);
 		$this->expectExceptionMessage('URL does not have a valid format.');
 
-		$this->shortener->urlToShortUrl('invalid-url');
+		$shortener = $this->createShortener($this->createStub(ShortUrlRepository::class));
+
+		$shortener->urlToShortUrl('invalid-url');
 	}
 
 	public function testShortCodeToUrl(): void
 	{
-		$method = new \ReflectionMethod($this->shortener, 'generateRandomString');
-		$method->setAccessible(true);
+		$repo = $this->createMock(ShortUrlRepository::class);
+		$shortener = $this->createShortener($repo);
+		$method = new \ReflectionMethod($shortener, 'generateRandomString');
 
-		$code = $method->invoke($this->shortener, 7);
+		$code = $method->invoke($shortener, 7);
 
 		$entity = new ShortUrl();
 		$entity->setLongUrl($this->longUrl)
 			->setShortCode($code);
 
-		$this->repo->expects($this->once())
+		$repo->expects($this->once())
 			->method('findOneBy')
 			->with($this->equalTo(['shortCode' => $code]))
 			->willReturn($entity);
 
-		$res = $this->shortener->shortCodeToUrl($code, false);
+		$res = $shortener->shortCodeToUrl($code, false);
 
 		$this->assertSame($entity, $res);
 	}
@@ -94,7 +96,9 @@ final class ShortenerServiceTest extends TestCase
 		$this->expectException(ShortenerException::class);
 		$this->expectExceptionMessage('No short code was specified.');
 
-		$this->shortener->shortCodeToUrl('', false);
+		$shortener = $this->createShortener($this->createStub(ShortUrlRepository::class));
+
+		$shortener->shortCodeToUrl('', false);
 	}
 
 	public function testShortCodeToUrlShouldThrowExceptionOnInvalidCode(): void
@@ -102,6 +106,8 @@ final class ShortenerServiceTest extends TestCase
 		$this->expectException(ShortenerException::class);
 		$this->expectExceptionMessage('Short code does not have a valid format.');
 
-		$this->shortener->shortCodeToUrl('invalid-code', false);
+		$shortener = $this->createShortener($this->createStub(ShortUrlRepository::class));
+
+		$shortener->shortCodeToUrl('invalid-code', false);
 	}
 }

@@ -1,0 +1,11 @@
+services:
+  php:
+    image: ${IMAGES_PREFIX:-}url-shortener-php
+    build:
+      context: .
+      target: frankenphp_prod
+    environment:
+      APP_ENV: prod
+      APP_SECRET: ${APP_SECRET}
+      SERVER_NAME: ${SERVER_NAME}
+      DATABASE_URL: ${DATABASE_URL}
